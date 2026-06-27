@@ -1,27 +1,17 @@
-'use client'
-
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { redirect } from 'next/navigation'
-import { useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 
-export default function Page() {
-  useEffect(() => {
-    // Check if user is already logged in
-    const checkAuth = async () => {
-      const supabase = createClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+export default async function Page() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-      if (user) {
-        redirect('/dashboard')
-      }
-    }
-
-    checkAuth()
-  }, [])
+  if (user) {
+    redirect('/dashboard')
+  }
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
