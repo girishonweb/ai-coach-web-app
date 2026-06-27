@@ -10,8 +10,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'AI Coach - Structured Coaching Framework',
+  description: 'AI-powered coaching platform with 8-layer structured framework for personal and professional development',
   generator: 'v0.app',
   icons: {
     icon: [
