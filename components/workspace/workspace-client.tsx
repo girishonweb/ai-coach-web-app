@@ -55,12 +55,13 @@ export function WorkspaceClient({
         onLayerSelect={setCurrentLayerIndex}
       />
       <WorkspaceContent
-        key={currentLayer.id}   /* remount content when layer changes to reset local state */
+        key={currentLayer.id}
         project={project}
         layer={currentLayer}
         layerIndex={currentLayerIndex}
         totalLayers={layers.length}
         onNextLayer={() => setCurrentLayerIndex(currentLayerIndex + 1)}
+        allLayers={layers}
       />
     </div>
   )
