@@ -29,11 +29,22 @@ export function WorkspaceClient({
   project: Project
   layers: Layer[]
 }) {
-  const [currentLayerIndex, setCurrentLayerIndex] = useState(
-    Math.max(0, project.current_layer - 1),
+  // current_layer is 1-indexed; clamp to valid range
+  const initialIndex = Math.min(
+    Math.max(0, (project.current_layer ?? 1) - 1),
+    Math.max(0, layers.length - 1),
   )
+  const [currentLayerIndex, setCurrentLayerIndex] = useState(initialIndex)
 
   const currentLayer = layers[currentLayerIndex]
+
+  if (!currentLayer) {
+    return (
+      <div className="flex h-screen items-center justify-center text-muted-foreground">
+        No layers found for this project.
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen bg-background">
@@ -43,15 +54,14 @@ export function WorkspaceClient({
         currentLayerIndex={currentLayerIndex}
         onLayerSelect={setCurrentLayerIndex}
       />
-      {currentLayer && (
-        <WorkspaceContent
-          project={project}
-          layer={currentLayer}
-          layerIndex={currentLayerIndex}
-          totalLayers={layers.length}
-          onNextLayer={() => setCurrentLayerIndex(currentLayerIndex + 1)}
-        />
-      )}
+      <WorkspaceContent
+        key={currentLayer.id}   /* remount content when layer changes to reset local state */
+        project={project}
+        layer={currentLayer}
+        layerIndex={currentLayerIndex}
+        totalLayers={layers.length}
+        onNextLayer={() => setCurrentLayerIndex(currentLayerIndex + 1)}
+      />
     </div>
   )
 }

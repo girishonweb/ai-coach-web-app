@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { LAYER_KEYS_IN_ORDER, LayerTitles } from '@/components/workspace/layer-descriptions'
 
 export async function getProjects() {
   const supabase = await createClient()
@@ -55,12 +56,12 @@ export async function createProject(title: string) {
     throw new Error(error.message)
   }
 
-  // Create initial 8 layers for the project
-  const layers = Array.from({ length: 8 }, (_, i) => ({
+  // Create the 8 coaching layers with the correct layer_key values the workflow expects
+  const layers = LAYER_KEYS_IN_ORDER.map((key, i) => ({
     project_id: project.id,
     layer_number: i + 1,
-    layer_key: `layer_${i + 1}`,
-    title: `Layer ${i + 1}`,
+    layer_key: key,
+    title: LayerTitles[key],
     status: 'pending',
     user_input: null,
     ai_output: null,
@@ -131,9 +132,7 @@ export async function updateLayerStatus(
     throw new Error('Unauthorized')
   }
 
-  const updateData: Record<string, unknown> = {
-    status,
-  }
+  const updateData: Record<string, unknown> = { status }
 
   if (userInput !== undefined) {
     updateData.user_input = userInput
