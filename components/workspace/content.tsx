@@ -28,8 +28,9 @@ export function WorkspaceContent({
   const [userInput, setUserInput] = useState(
     typeof layer.user_input === 'string' ? layer.user_input : '',
   )
-  const aiOutput =
-    typeof layer.ai_output === 'string' ? layer.ai_output : null
+  const [aiOutput, setAiOutput] = useState(
+    typeof layer.ai_output === 'string' ? layer.ai_output : null,
+  )
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
@@ -125,6 +126,7 @@ export function WorkspaceContent({
           layer={layer}
           userInput={userInput}
           aiOutput={aiOutput}
+          onAiOutputChange={setAiOutput}
           layerIndex={layerIndex}
           totalLayers={totalLayers}
           onNextLayer={onNextLayer}
